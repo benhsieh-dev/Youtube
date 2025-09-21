@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: youtube-app
+  
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=youtube_db;encrypt=false;trustServerCertificate=true
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: sa
+    password: YoutubeApp123!
+  
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+logging:
+  level:
+    com.youtube.app: DEBUG
+    org.springframework.web: DEBUG
