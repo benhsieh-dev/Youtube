@@ -37,16 +37,6 @@ CREATE DATABASE youtube_db;
 - **demo**: 
 - **demo123**: 
 
-### Database Credentials
-- **Username**: postgres
-- **Password**:
-
-### Database Access
-- **Host**: localhost:1433
-- **Username**: sa
-- **Password**: YoutubeApp123!
-- **Database**: youtube_db
-
 ### Stopping Services
 ```bash
 docker-compose down
@@ -87,11 +77,5 @@ Stop frontend: Ctrl+C in frontend terminal
 Stop backend: Ctrl+C in backend terminal
 Stop database: docker-compose down
 
-postgres=# CREATE DATABASE youtube_db;
-CREATE DATABASE
-postgres=# CREATE USER postgres WITH PASSWORD 'postgres';
-CREATE ROLE
-postgres=# GRANT ALL PRIVILEGES ON DATABASE youtube_db TO postgres;
-GRANT
-postgres=# \q
+
 
