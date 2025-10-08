@@ -1,5 +1,14 @@
 # YouTube-like Application
 
+## Technologies Used
+- Java 20
+- Spring Boot
+- React
+- Docker
+- PostgreSQL
+- Docker Compose
+- Maven
+
 ## Quick Start
 
 ### 1. Start SQL Server
@@ -14,16 +23,23 @@ CREATE DATABASE youtube_db;
 ```
 
 ### 3. Run Application
-```bash
-mvn spring-boot:run
-```
+### Start Backend (Spring Boot)
+### video-platform
+- mvn spring-boot:run
+
+### Start Frontend (Angular)
+### /frontend
+-npm start
 
 ## Development Setup
 
-### Prerequisites
-- Java 20
-- Maven 3.6+
-- Docker
+### Demo User Credentials
+- **demo**: 
+- **demo123**: 
+
+### Database Credentials
+- **Username**: postgres
+- **Password**:
 
 ### Database Access
 - **Host**: localhost:1433
@@ -70,3 +86,12 @@ cd frontend && npm start
 Stop frontend: Ctrl+C in frontend terminal
 Stop backend: Ctrl+C in backend terminal
 Stop database: docker-compose down
+
+postgres=# CREATE DATABASE youtube_db;
+CREATE DATABASE
+postgres=# CREATE USER postgres WITH PASSWORD 'postgres';
+CREATE ROLE
+postgres=# GRANT ALL PRIVILEGES ON DATABASE youtube_db TO postgres;
+GRANT
+postgres=# \q
+

@@ -1,0 +1,55 @@
+<div class="app" *ngIf="!showAuth">
+  <app-header (showLogin)="showLoginModal()"></app-header>
+  
+  <div class="layout-body">
+    <app-sidebar [isOpen]="sidebarOpen"></app-sidebar>
+    
+    <main class="main-content" [class.sidebar-closed]="!sidebarOpen">
+      <div *ngIf="user; else landingSection" class="welcome-section">
+        <h1>Welcome to YouTube, {{ user.username }}!</h1>
+        <p>Your video platform is ready to use.</p>
+        
+        <div class="feature-cards">
+          <div class="card">
+            <h3>📹 Upload Videos</h3>
+            <p>Share your content with the world</p>
+          </div>
+          
+          <div class="card">
+            <h3>👥 Build Your Channel</h3>
+            <p>Create and customize your channel</p>
+          </div>
+          
+          <div class="card">
+            <h3>📊 Analytics</h3>
+            <p>Track your video performance</p>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #landingSection>
+        <div class="landing-section">
+          <h1>Welcome to YouTube</h1>
+          <p>The ultimate video sharing platform</p>
+          <button class="cta-button" (click)="showLoginModal()">
+            Get Started
+          </button>
+        </div>
+      </ng-template>
+    </main>
+  </div>
+</div>
+
+<div *ngIf="showAuth" class="auth-overlay">
+  <app-login 
+    *ngIf="authMode === 'login'"
+    (switchToRegister)="switchToRegister()">
+  </app-login>
+  
+  <app-register 
+    *ngIf="authMode === 'register'"
+    (switchToLogin)="switchToLogin()">
+  </app-register>
+</div>
+
+<router-outlet></router-outlet>

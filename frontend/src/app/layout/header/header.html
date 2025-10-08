@@ -1,0 +1,25 @@
+<header class="header">
+  <div class="header-content">
+    <div class="header-left">
+      <h1 class="logo">YouTube</h1>
+    </div>
+    
+    <div class="header-center">
+      <div class="search-container">
+        <input type="text" placeholder="Search" class="search-input">
+        <button class="search-button">🔍</button>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <div *ngIf="user; else loginButton" class="user-section">
+        <span class="username">{{ user.username }}</span>
+        <button class="logout-button" (click)="onLogout()">Sign Out</button>
+      </div>
+      
+      <ng-template #loginButton>
+        <button class="login-button" (click)="onShowLogin()">Sign In</button>
+      </ng-template>
+    </div>
+  </div>
+</header>

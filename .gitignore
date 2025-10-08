@@ -132,3 +132,6 @@ videos/
 
 # Project documentation (as requested)
 project.md
+
+# Database backup file
+*.sql

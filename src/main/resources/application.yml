@@ -6,13 +6,13 @@ spring:
     name: youtube-app
   
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=youtube_db;encrypt=false;trustServerCertificate=true
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    username: sa
-    password: YoutubeApp123!
+    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   
   jpa:
-    database-platform: org.hibernate.dialect.SQLServerDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
