@@ -50,7 +50,7 @@ docker-compose up -d
 
 2. Start Backend API (Spring Boot)
 
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-20.jdk/Contents/Home && mvn spring-boot:run
+mvn spring-boot:run
 
 3. Start Frontend (React) - In a new terminal
 
@@ -58,24 +58,43 @@ cd frontend && npm start
 
 Access Points
 
-- Frontend (User Interface): http://localhost:3000
+- Frontend (User Interface): http://localhost:4200
 - Backend API: http://localhost:8080 (for testing only)
-- Database: SQL Server running in Docker
+- Database: Postgresql running in Docker
 
 
 ## Quick Start Guide
 
 ### Terminal 1: Start database and backend
-docker-compose up -d && export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-20.jdk/Contents/Home && mvn spring-boot:run
+docker-compose up -d && mvn spring-boot:run
 
 ### Terminal 2: Start frontend
 cd frontend && npm start
 
-### Stop Everything
+### Close Application 
 
 Stop frontend: Ctrl+C in frontend terminal
 Stop backend: Ctrl+C in backend terminal
 Stop database: docker-compose down
 
+## Docker Commands
+docker exec -it youtube-postgres psql -U postgres -d youtube_db
+-- List all tables
+\dt
+
+-- Check if users table exists and see its structure
+\d users
+
+-- See all users in the database
+SELECT * FROM users;
+
+docker system prune -a
+
+## Brew Commands
+brew services start postgresql
+brew services list | grep postgres
+brew services stop postgresql@17
 
 
+## Status check
+lsof -i:8080

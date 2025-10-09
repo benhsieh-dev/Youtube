@@ -7,8 +7,8 @@
 
 body {
   font-family: 'Roboto', 'Arial', sans-serif;
-  background-color: #0f0f0f;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000000;
   line-height: 1.6;
 }
 
@@ -366,19 +366,19 @@ body {
   .search-container {
     display: none;
   }
-  
+
   .sidebar {
     width: 72px;
   }
-  
+
   .main-content {
     margin-left: 72px;
   }
-  
+
   .feature-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .auth-container {
     margin: 20px;
     padding: 30px 20px;
