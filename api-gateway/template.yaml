@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Video Platform API Gateway with Lambda functions'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+  
+  DatabaseUrl:
+    Type: String
+    Description: PostgreSQL database URL
+    Default: jdbc:postgresql://your-rds-endpoint:5432/youtube_db
+  
+  DatabaseUsername:
+    Type: String
+    Description: Database username
+    Default: postgres
+  
+  DatabasePassword:
+    Type: String
+    Description: Database password
+    NoEcho: true
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: java20
+    Environment:
+      Variables:
+        DB_URL: !Ref DatabaseUrl
+        DB_USERNAME: !Ref DatabaseUsername
+        DB_PASSWORD: !Ref DatabasePassword
+        ENVIRONMENT: !Ref Environment
+
+Resources:
+  # API Gateway
+  VideoApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Environment
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+      Auth:
+        DefaultAuthorizer: NONE
+
+  # Auth Lambda Function
+  AuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'video-platform-auth-${Environment}'
+      CodeUri: ../lambda/auth-service/target/auth-service-1.0.0.jar
+      Handler: com.youtube.lambda.auth.AuthHandler::handleRequest
+      Events:
+        AuthRegister:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /auth/register
+            Method: post
+        AuthLogin:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /auth/login
+            Method: post
+        AuthCheck:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /auth/check
+            Method: get
+
+  # User Lambda Function
+  UserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'video-platform-user-${Environment}'
+      CodeUri: ../lambda/user-service/target/user-service-1.0.0.jar
+      Handler: com.youtube.lambda.user.UserHandler::handleRequest
+      Events:
+        UserProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /users/profile
+            Method: get
+        UpdateProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /users/profile
+            Method: put
+        GetUserProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref VideoApiGateway
+            Path: /users/{username}
+            Method: get
+
+  # Lambda Permissions
+  AuthFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AuthFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub '${VideoApiGateway}/*/auth/*'
+
+  UserFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref UserFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub '${VideoApiGateway}/*/users/*'
+
+Outputs:
+  ApiGatewayUrl:
+    Description: 'API Gateway URL'
+    Value: !Sub 'https://${VideoApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiUrl'
+  
+  AuthFunctionArn:
+    Description: 'Auth Lambda Function ARN'
+    Value: !GetAtt AuthFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-AuthFunctionArn'
+  
+  UserFunctionArn:
+    Description: 'User Lambda Function ARN'
+    Value: !GetAtt UserFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-UserFunctionArn'

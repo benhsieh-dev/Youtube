@@ -98,3 +98,8 @@ brew services stop postgresql@17
 
 ## Status check
 lsof -i:8080
+
+## API Gateway Deployment Process   
+1. Deploy Lambda services: cd api-gateway && ./deploy.sh prod
+2. Update frontend API URL with actual API Gateway endpoint
+3. Deploy EC2 application: ./deploy.sh prod
